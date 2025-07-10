@@ -1,0 +1,99 @@
+<!DOCTYPE html [  <!ENTITY nbsp "entity-value">
+]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Gestión de Espacios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1, h3 {
+            color: #2c3e50;
+        }
+
+        .formulario, .tabla, .editar {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            background-color: #f9f9f9;
+        }
+
+        .tabla table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla th, .tabla td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .tabla th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .boton {
+            margin-top: 12px;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <h1>Gestión de Espacios</h1>
+
+    <!-- Formulario para registrar nuevo espacio -->
+    <h:form styleClass="formulario">
+        <h:panelGrid columns="2" columnClasses="label,value">
+            <h:outputLabel value="Nombre del espacio:" for="nombre" />
+            <h:inputText id="nombre" value="#{espacioBean.espacio.numero}" required="true" />
+
+            <h:outputLabel />
+            <h:commandButton value="Guardar" action="#{espacioBean.guardar}" styleClass="boton" />
+        </h:panelGrid>
+    </h:form>
+
+    <!-- Tabla con lista de espacios -->
+    <h:form styleClass="tabla">
+        <h:dataTable value="#{espacioBean.espacios}" var="e" styleClass="data-table">
+            <h:column>
+                <f:facet name="header">ID</f:facet>
+                #{e.id}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Nombre</f:facet>
+                #{e.numero}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Acciones</f:facet>
+                <h:commandButton value="Editar" action="#{espacioBean.editar(e)}" />
+                &nbsp;
+                <h:commandButton value="Eliminar" action="#{espacioBean.eliminar(e)}"
+                                 onclick="return confirm('¿Estás seguro de eliminar este espacio?');" />
+            </h:column>
+        </h:dataTable>
+    </h:form>
+
+    <!-- Formulario para actualizar espacio -->
+    <h:form rendered="#{not empty espacioBean.espacioSeleccionado.id}" styleClass="editar">
+        <h3>Editar Espacio</h3>
+        <h:panelGrid columns="2" columnClasses="label,value">
+            <h:outputLabel value="Nuevo nombre:" for="nuevoNombre" />
+            <h:inputText id="nuevoNombre" value="#{espacioBean.espacioSeleccionado.numero}" required="true" />
+
+            <h:outputLabel />
+            <h:commandButton value="Actualizar" action="#{espacioBean.actualizar}" styleClass="boton" />
+        </h:panelGrid>
+    </h:form>
+
+</h:body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      lang="es">
+<h:head>
+    <title>Registro de Usuario</title>
+    <link href="/resources/css/registro.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</h:head>
+
+<h:body>
+    <div class="container">
+        <h:messages globalOnly="true" styleClass="messages" />
+
+        <h1>Registro de Usuario</h1>
+
+        <h:form>
+            <div class="form-group">
+                <h:outputLabel for="nombre" value="Nombre o usuario:*" />
+                <h:inputText id="nombre" value="#{usuarioBean.usuario.nombre}"
+                             styleClass="form-control" required="true" />
+                <h:message for="nombre" styleClass="error-message" />
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel for="correo" value="Correo electrónico:" />
+                <h:inputText id="correo" value="#{usuarioBean.usuario.correo}"
+                             styleClass="form-control" required="false" />
+                <h:message for="correo" styleClass="error-message" />
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel for="contrasena" value="Contraseña:*" />
+                <h:inputSecret id="contrasena" value="#{usuarioBean.usuario.contrasenia}"
+                               styleClass="form-control" required="true" />
+                <h:message for="contrasena" styleClass="error-message" />
+            </div>
+
+            <div class="form-group">
+                <h:commandButton value="Registrarse" action="#{usuarioBean.guardar}"
+                                 styleClass="btn" />
+                <br/><br/>
+                <h:outputLink value="/vistas/inicio.html" styleClass="btn-volver">← Volver a inicio</h:outputLink>
+            </div>
+        </h:form>
+    </div>
+</h:body>
+</html>

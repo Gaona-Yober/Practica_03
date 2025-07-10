@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      lang="es">
+<h:head>
+    <title>Registro de Espacio</title>
+    <link href="/resources/css/agregarEspacio.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</h:head>
+<h:body>
+    <div class="container">
+        <h:messages globalOnly="true" styleClass="messages" />
+
+        <h1>Registro de Espacio</h1>
+
+        <h:form>
+            <div class="form-group">
+                <h:outputLabel for="nombre" value="Numero:" />
+                <h:inputText id="nombre" value="#{espacioBean.espacio.numero}"
+                             styleClass="form-control" required="true" />
+                <h:message for="nombre" styleClass="error-message" />
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel for="ubicacion" value="Ubicación:" />
+                <h:inputText id="ubicacion" value="#{espacioBean.espacio.ubicacion}"
+                             styleClass="form-control" required="true" />
+                <h:message for="ubicacion" styleClass="error-message" />
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel for="capacidad" value="Capacidad:" />
+                <h:inputText id="capacidad" value="#{espacioBean.espacio.capacidad}"
+                             styleClass="form-control" required="true" />
+                <h:message for="capacidad" styleClass="error-message" />
+            </div>
+
+            <h:commandButton value="Guardar Espacio" action="#{espacioBean.guardar()}"
+                             styleClass="btn" />
+        </h:form>
+        <a href="/vistas/seccionAdmin.xhtml" class="btn">Regresar</a>
+
+    </div>
+</h:body>
+</html>

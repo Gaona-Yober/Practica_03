@@ -1,0 +1,58 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <link href="/resources/css/seccionAdmin.css" rel="stylesheet" type="text/css" />
+    <title>Admin - Espacios</title>
+
+</h:head>
+<h:body>
+    <div class="container">
+        <h1>Administrar Espacios</h1>
+
+        <h:form>
+            <!-- Tabla con los espacios -->
+            <h:dataTable value="#{espacioBean.espacios}" var="e" border="1" styleClass="data-table">
+                <h:column>
+                    <f:facet name="header">Ubicacion</f:facet>
+                    #{e.ubicacion}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Numero</f:facet>
+                    #{e.numero}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Capacidad</f:facet>
+                    #{e.capacidad}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Acción</f:facet>
+                    <h:commandButton value="Editar" action="#{espacioBean.editar(e)}" styleClass="btn" />
+                </h:column>
+
+            </h:dataTable>
+
+            <!-- Formulario para editar espacio -->
+            <h:panelGrid columns="2" rendered="#{espacioBean.espacioSeleccionado.id != null}" styleClass="form-panel">
+                <h:outputLabel value="ID:" styleClass="form-label" />
+                <h:outputText value="#{espacioBean.espacioSeleccionado.id}" />
+
+                <h:outputLabel value="Numero:" styleClass="form-label" />
+                <h:inputText value="#{espacioBean.espacioSeleccionado.numero}" styleClass="form-input" />
+
+                <h:outputText value="Capacidad" styleClass="form-label" />
+                <h:inputText value="#{espacioBean.espacioSeleccionado.capacidad}" styleClass="form-input" />
+
+                <h:outputLabel />
+                <h:commandButton value="Guardar Cambios" action="#{espacioBean.actualizar()}" styleClass="btn btn-primary" />
+            </h:panelGrid>
+
+            <a href="/vistas/agregarEspacio.xhtml" class="add-space-link">Agregar espacio</a>  <a href="inicio.html" class="add-space-link">Volver al inicio</a>
+        </h:form>
+    </div>
+
+
+</h:body>
+</html>
