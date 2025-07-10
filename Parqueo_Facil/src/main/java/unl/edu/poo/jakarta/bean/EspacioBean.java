@@ -7,6 +7,7 @@ import unl.edu.poo.jakarta.modelo.Espacio;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Named
 @ViewScoped
@@ -16,6 +17,8 @@ public class EspacioBean implements Serializable {
 
     private Espacio espacio = new Espacio();
     private Espacio espacioSeleccionado = new Espacio();
+    private Map<String, List<Espacio>> espaciosPorUbicacion;
+
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
 
@@ -97,5 +100,10 @@ public class EspacioBean implements Serializable {
             em.close();
         }
     }
+
+    public Map<String, List<Espacio>> getEspaciosPorUbicacion() {
+        return espaciosPorUbicacion;
+    }
+
 
 }

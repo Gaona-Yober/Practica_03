@@ -2,51 +2,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
       lang="es">
+
 <h:head>
     <title>Reserva de Estacionamiento</title>
     <link href="/resources/css/reserva.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 </h:head>
+
 <h:body>
     <f:view>
         <div class="container">
-            <h:messages globalOnly="true" styleClass="messages" rendered="#{not empty facesContext.messageList}">
-            </h:messages>
+            <div class="header">
+                <h1>Registrar Reserva de Estacionamiento</h1>
+                <h:outputLink value="/vistas/inicio.html" styleClass="btn-volver">
+                    ← Volver a inicio
+                </h:outputLink>
+            </div>
 
-            <h1>Registrar Reserva de Estacionamiento</h1>
+            <h:messages globalOnly="true" styleClass="messages"
+                        rendered="#{not empty facesContext.messageList}" />
 
-            <h:form>
-                <div class="form-group">
-                    <h:outputLabel for="fecha" value="Fecha:" />
-                    <h:inputText id="fecha" value="#{reservaBean.reserva.fecha}" styleClass="form-control">
-                        <f:passThroughAttribute name="type" value="date" />
-                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                    </h:inputText>
+            <h:form styleClass="reserva-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <h:outputLabel for="fecha" value="Fecha de reserva:" />
+                        <h:inputText id="fecha" value="#{reservaBean.reserva.fecha}"
+                                     styleClass="form-control" required="true"
+                                     requiredMessage="La fecha es obligatoria">
+                            <f:passThroughAttribute name="type" value="date" />
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:inputText>
+                    </div>
 
-
+                    <div class="form-group">
+                        <h:outputLabel value="Usuario:" />
+                        <div class="user-display">
+                            <h:outputText value="#{reservaBean.usuarioLogueado.nombre}" />
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <h:outputLabel for="usuario" value="Usuario:" />
-                    <h:selectOneMenu id="usuario" value="#{reservaBean.idUsuario}" styleClass="form-control">
-                        <f:selectItems value="#{reservaBean.usuarios}" var="u" itemValue="#{u.id}" itemLabel="#{u.nombre}" />
-                    </h:selectOneMenu>
+                <h2 class="section-title">Seleccione un espacio</h2>
+
+                <!-- Agrupación visual por ubicación -->
+
+
+
+                <!-- Un solo grupo de radios para seleccionar el espacio -->
+                <h:selectOneRadio value="#{reservaBean.idEspacio}" layout="pageDirection" styleClass="espacios-grid">
+                    <f:selectItems value="#{reservaBean.espacios}" var="espacio"
+                                   itemValue="#{espacio.id}"
+                                   itemLabel="Ubicacion: #{espacio.ubicacion} - Nro Espacios: #{espacio.numero}" />
+                </h:selectOneRadio>
+
+                <div class="form-actions">
+                    <h:commandButton value="Confirmar Reserva"
+                                     action="#{reservaBean.guardar}"
+                                     styleClass="btn btn-primary" />
                 </div>
-
-                <div class="form-group">
-                    <h:outputLabel for="espacio" value="Estacionamiento numero:" />
-                    <h:selectOneMenu id="espacio" value="#{reservaBean.idEspacio}" styleClass="form-control">
-                        <f:selectItems value="#{reservaBean.espacios}" var="e" itemValue="#{e.id}" itemLabel="#{e.numero}" />
-                    </h:selectOneMenu>
-                </div>
-
-                <h:commandButton value="Guardar Reserva" action="#{reservaBean.guardar}" styleClass="btn" />
-
-                <h:outputLink value="/vistas/inicio.html" styleClass="btn-volver">← Volver a inicio</h:outputLink>
-                <!--<a href="/vistas/inicio.html" class="btn">Regresar</a> -->
             </h:form>
         </div>
     </f:view>

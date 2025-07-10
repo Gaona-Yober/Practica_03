@@ -1,18 +1,18 @@
 package unl.edu.poo.jakarta.bean;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import unl.edu.poo.jakarta.modelo.Espacio;
 import unl.edu.poo.jakarta.modelo.Reserva;
 import unl.edu.poo.jakarta.modelo.Usuario;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Named("reservaBean")
 @ViewScoped
@@ -21,16 +21,52 @@ public class ReservaBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Reserva reserva;
-
-    private Long idUsuario;
+    private Usuario usuarioLogueado;
     private Long idEspacio;
+    private Long idUsuario;
+
+
+    private List<Espacio> espacios;
+    private Map<String, List<Espacio>> espaciosPorUbicacion;
 
     private EntityManagerFactory emf;
 
-    @PostConstruct
-    public void init() {
-        reserva = new Reserva();
+    public ReservaBean() {
         emf = Persistence.createEntityManagerFactory("reservaPU");
+    }
+
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            espacios = em.createQuery("SELECT e FROM Espacio e", Espacio.class).getResultList();
+
+            espaciosPorUbicacion = new HashMap<>();
+            for (Espacio e : espacios) {
+                espaciosPorUbicacion
+                        .computeIfAbsent(e.getUbicacion(), k -> new ArrayList<>())
+                        .add(e);
+            }
+
+            reserva = new Reserva();
+
+            usuarioLogueado = (Usuario) FacesContext.getCurrentInstance()
+                    .getExternalContext()
+                    .getSessionMap()
+                    .get("usuario");
+            if (usuarioLogueado == null) {
+                System.out.println("Usuario logueado es null");
+            } else if (usuarioLogueado.getId() == null) {
+                System.out.println("Usuario logueado ID es null");
+            } else {
+                System.out.println("Usuario logueado ID: " + usuarioLogueado.getId());
+            }
+
+            // idUsuario no es necesario, usamos usuarioLogueado directamente
+        } finally {
+            em.close();
+        }
     }
 
     public Reserva getReserva() {
@@ -41,14 +77,6 @@ public class ReservaBean implements Serializable {
         this.reserva = reserva;
     }
 
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
     public Long getIdEspacio() {
         return idEspacio;
     }
@@ -57,23 +85,60 @@ public class ReservaBean implements Serializable {
         this.idEspacio = idEspacio;
     }
 
+    public List<Espacio> getEspacios() {
+        return espacios;
+    }
+
+    public Map<String, List<Espacio>> getEspaciosPorUbicacion() {
+        return espaciosPorUbicacion;
+    }
+
+    public Usuario getUsuarioLogueado() {
+        return usuarioLogueado;
+    }
+
     public void guardar() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
+        if (usuarioLogueado == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no identificado. Por favor inicie sesión."));
+            return;
+        }
+
         EntityManager em = emf.createEntityManager();
 
         try {
             if (reserva.getFecha() != null) {
-                // Sumar 1 día a la fecha
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(reserva.getFecha());
-                cal.add(Calendar.DATE, 1); // aquí sumas 1 día
+                cal.add(Calendar.DATE, 1);
                 reserva.setFecha(cal.getTime());
             }
+
             em.getTransaction().begin();
 
-            // Buscar usuario y espacio antes de persistir
-            Usuario u = em.find(Usuario.class, idUsuario);
+            if (usuarioLogueado == null || usuarioLogueado.getId() == null) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no identificado o inválido"));
+                return;
+            }
+
+            if (idEspacio == null) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar un espacio"));
+                return;
+            }
+
+
+            Usuario u = em.find(Usuario.class, usuarioLogueado.getId());
             Espacio e = em.find(Espacio.class, idEspacio);
+
+            if (e == null) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Seleccione un espacio válido."));
+                em.getTransaction().rollback();
+                return;
+            }
+
             reserva.setUsuario(u);
             reserva.setEspacio(e);
 
@@ -83,33 +148,24 @@ public class ReservaBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva guardada exitosamente", null));
 
-            // Limpia el formulario
             reserva = new Reserva();
-            idUsuario = null;
             idEspacio = null;
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
             em.getTransaction().rollback();
-            e.printStackTrace();
+            ex.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar la reserva", null));
         } finally {
             em.close();
-            emf.close();
         }
     }
-
-    public List<Usuario> getUsuarios() {
-        EntityManager em = emf.createEntityManager();
-        List<Usuario> lista = em.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
-        em.close();
-        return lista;
+    public void verificarSesion() {
+        Object user = FacesContext.getCurrentInstance()
+                .getExternalContext()
+                .getSessionMap()
+                .get("usuario");
+        System.out.println("Usuario en sesión: " + user);
     }
 
-    public List<Espacio> getEspacios() {
-        EntityManager em = emf.createEntityManager();
-        List<Espacio> lista = em.createQuery("SELECT e FROM Espacio e", Espacio.class).getResultList();
-        em.close();
-        return lista;
-    }
 }

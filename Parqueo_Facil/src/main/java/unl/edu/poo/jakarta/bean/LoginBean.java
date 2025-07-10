@@ -1,5 +1,6 @@
 package unl.edu.poo.jakarta.bean;
 
+import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import unl.edu.poo.jakarta.modelo.Usuario;
 import java.io.Serializable;
 
 @Named
+@ManagedBean
 @SessionScoped
 public class LoginBean implements Serializable {
 
@@ -29,6 +31,12 @@ public class LoginBean implements Serializable {
             Usuario resultado = query.getSingleResult();
 
             if (resultado != null) {
+                // guardar el usuario en la sesión con la clave "usuario"
+                jakarta.faces.context.FacesContext.getCurrentInstance()
+                        .getExternalContext()
+                        .getSessionMap()
+                        .put("usuario", resultado);
+
                 return "/vistas/reserva.xhtml?faces-redirect=true";
             }
         } catch (NoResultException e) {
@@ -61,4 +69,5 @@ public class LoginBean implements Serializable {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
+
 }
