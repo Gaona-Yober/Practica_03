@@ -10,35 +10,8 @@
     <link href="/resources/css/reserva.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        .espacios-radio {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
 
-        .espacios-radio td {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 12px;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s ease;
-            display: block;
-        }
-
-        .espacios-radio input[type="radio"] {
-            margin-right: 8px;
-        }
-
-        .espacios-radio td:hover {
-            background-color: #e6f7ff;
-            cursor: pointer;
-        }
-
-    </style>
 </h:head>
-
-
 
 <h:body>
     <f:view>
@@ -75,27 +48,12 @@
 
                 <h2 class="section-title">Seleccione un espacio</h2>
 
-                <!-- Agrupación visual por ubicación -->
-
-
-
-                <!-- Un solo grupo de radios para seleccionar el espacio
-                <h:selectOneRadio value="#{reservaBean.idEspacio}" layout="pageDirection" styleClass="espacios-grid">
-                    <f:selectItems value="#{reservaBean.espacios}" var="espacio"
-                                   itemValue="#{espacio.id}"
-                                   itemLabel="Ubicacion: #{espacio.ubicacion}
-                                   - Nro Espacio: #{espacio.numero}
-                                   - Capacidad: #{espacio.capacidad}" />
-                </h:selectOneRadio>-->
-
                 <h:selectOneRadio value="#{reservaBean.idEspacio}" layout="pageDirection" styleClass="espacios-radio">
                     <f:selectItems value="#{reservaBean.espacios}"
                                    var="espacio"
                                    itemValue="#{espacio.id}"
                                    itemLabel="Ubicación: #{espacio.ubicacion} | Espacio: #{espacio.numero} | Capacidad: #{espacio.capacidad}" />
                 </h:selectOneRadio>
-
-
 
                 <div class="form-actions">
                     <h:commandButton value="Confirmar Reserva"
