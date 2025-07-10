@@ -62,3 +62,8 @@ h1 {
     font-size: 14px;
     margin-top: 5px;
 }
+
+
+.btn-volver i {
+    margin-right: 5px;
+}

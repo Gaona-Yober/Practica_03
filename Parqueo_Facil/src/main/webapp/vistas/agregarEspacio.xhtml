@@ -18,7 +18,7 @@
 
         <h:form>
             <div class="form-group">
-                <h:outputLabel for="nombre" value="Numero:" />
+                <h:outputLabel for="nombre" value="Nro Espacio:" />
                 <h:inputText id="nombre" value="#{espacioBean.espacio.numero}"
                              styleClass="form-control" required="true" />
                 <h:message for="nombre" styleClass="error-message" />
@@ -40,8 +40,11 @@
 
             <h:commandButton value="Guardar Espacio" action="#{espacioBean.guardar()}"
                              styleClass="btn" />
+
+
+            <h:outputLink value="/vistas/seccionAdmin.xhtml" styleClass="btn-volver">← Regresar</h:outputLink>
         </h:form>
-        <a href="/vistas/seccionAdmin.xhtml" class="btn">Regresar</a>
+
 
     </div>
 </h:body>
