@@ -10,7 +10,6 @@
     <link href="/resources/css/reserva.css" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 </h:head>
 
 <h:body>
@@ -27,6 +26,8 @@
                         rendered="#{not empty facesContext.messageList}" />
 
             <h:form styleClass="reserva-form">
+
+                <!-- Fecha -->
                 <div class="form-row">
                     <div class="form-group">
                         <h:outputLabel for="fecha" value="Fecha de reserva:" />
@@ -46,20 +47,57 @@
                     </div>
                 </div>
 
+                <!-- Espacios -->
                 <h2 class="section-title">Seleccione un espacio</h2>
+                <div class="form-group">
+                    <h:outputLabel for="espacio" value="Espacio:" />
+                    <h:selectOneMenu id="espacio" value="#{reservaBean.idEspacio}" styleClass="form-control">
+                        <f:selectItem itemLabel="Seleccione un espacio" itemValue="" />
+                        <f:selectItems value="#{reservaBean.espacios}" var="espacio"
+                                       itemValue="#{espacio.id}"
+                                       itemLabel="Ubicación: #{espacio.ubicacion} | Espacio: #{espacio.numero}" />
+                        <f:ajax listener="#{reservaBean.actualizarDiasDisponibles}" render="dias horarios" />
+                    </h:selectOneMenu>
+                </div>
 
-                <h:selectOneRadio value="#{reservaBean.idEspacio}" layout="pageDirection" styleClass="espacios-radio">
-                    <f:selectItems value="#{reservaBean.espacios}"
-                                   var="espacio"
-                                   itemValue="#{espacio.id}"
-                                   itemLabel="Ubicación: #{espacio.ubicacion} | Espacio: #{espacio.numero} | Capacidad: #{espacio.capacidad}" />
-                </h:selectOneRadio>
+                <!-- Días disponibles -->
+                <h:panelGroup id="dias">
+                    <h:panelGroup rendered="#{not empty reservaBean.diasDisponibles}">
+                        <div class="form-group">
+                            <h:outputLabel for="dia" value="Día disponible:" />
+                            <h:selectOneMenu id="dia"
+                                             value="#{reservaBean.diaSeleccionado}"
+                                             styleClass="form-control">
+                                <f:selectItem itemLabel="Seleccione un día" itemValue="" />
+                                <f:selectItems value="#{reservaBean.diasDisponibles}" />
+                                <f:ajax listener="#{reservaBean.actualizarHorariosDisponibles}" render="horarios" />
+                            </h:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
 
+                <!-- Horarios disponibles -->
+                <h:panelGroup id="horarios">
+                    <h:panelGroup rendered="#{not empty reservaBean.horariosDisponibles}">
+                        <div class="form-group">
+                            <h:outputLabel for="horario" value="Horario disponible:" />
+                            <h:selectOneMenu id="horario"
+                                             value="#{reservaBean.horarioSeleccionado}"
+                                             styleClass="form-control">
+                                <f:selectItem itemLabel="Seleccione un horario" itemValue="" />
+                                <f:selectItems value="#{reservaBean.horariosDisponibles}" />
+                            </h:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <!-- Confirmar -->
                 <div class="form-actions">
                     <h:commandButton value="Confirmar Reserva"
                                      action="#{reservaBean.guardar}"
                                      styleClass="btn btn-primary" />
                 </div>
+
             </h:form>
         </div>
     </f:view>
