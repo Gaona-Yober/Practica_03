@@ -29,15 +29,6 @@
 
                 <!-- Fecha -->
                 <div class="form-row">
-                    <div class="form-group">
-                        <h:outputLabel for="fecha" value="Fecha de reserva:" />
-                        <h:inputText id="fecha" value="#{reservaBean.reserva.fecha}"
-                                     styleClass="form-control" required="true"
-                                     requiredMessage="La fecha es obligatoria">
-                            <f:passThroughAttribute name="type" value="date" />
-                            <f:convertDateTime pattern="yyyy-MM-dd" />
-                        </h:inputText>
-                    </div>
 
                     <div class="form-group">
                         <h:outputLabel value="Usuario:" />
@@ -56,7 +47,10 @@
                         <f:selectItems value="#{reservaBean.espacios}" var="espacio"
                                        itemValue="#{espacio.id}"
                                        itemLabel="Ubicación: #{espacio.ubicacion} | Espacio: #{espacio.numero}" />
-                        <f:ajax listener="#{reservaBean.actualizarDiasDisponibles}" render="dias horarios" />
+                        <f:ajax event="change"
+                                listener="#{reservaBean.actualizarDiasDisponibles}"
+                                render="dias horarios"
+                                immediate="true" />
                     </h:selectOneMenu>
                 </div>
 
@@ -65,13 +59,13 @@
                     <h:panelGroup rendered="#{not empty reservaBean.diasDisponibles}">
                         <div class="form-group">
                             <h:outputLabel for="dia" value="Día disponible:" />
-                            <h:selectOneMenu id="dia"
-                                             value="#{reservaBean.diaSeleccionado}"
-                                             styleClass="form-control">
-                                <f:selectItem itemLabel="Seleccione un día" itemValue="" />
-                                <f:selectItems value="#{reservaBean.diasDisponibles}" />
-                                <f:ajax listener="#{reservaBean.actualizarHorariosDisponibles}" render="horarios" />
-                            </h:selectOneMenu>
+                            <h:inputText id="dia" value="#{reservaBean.diaSeleccionado}" styleClass="form-control" required="true">
+                                <f:passThroughAttribute name="type" value="date" />
+                                <f:ajax listener="#{reservaBean.actualizarHorariosDisponibles}" render="horarios" event="change" />
+                            </h:inputText>
+
+
+
                         </div>
                     </h:panelGroup>
                 </h:panelGroup>

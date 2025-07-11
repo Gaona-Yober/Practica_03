@@ -16,7 +16,12 @@ import unl.edu.poo.jakarta.modelo.Usuario;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
+import jakarta.faces.event.AjaxBehaviorEvent;
 
 @Named("reservaBean")
 @ViewScoped
@@ -118,6 +123,37 @@ public class ReservaBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Usuario no identificado. Por favor inicie sesión."));
             return;
         }
+        if (horarioSeleccionado == null || diaSeleccionado == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccione día y horario", null));
+            return;
+        }
+        /*espués de guardar exitosamente
+        reserva = new Reserva();
+        idEspacio = null;
+        diaSeleccionado = null;
+        horarioSeleccionado = null;
+        diasDisponibles = new ArrayList<>();
+        horariosDisponibles = new ArrayList<>();*/
+
+        // Convertir día y bloque horario a Date final con hora
+        LocalDate localDate = LocalDate.parse(diaSeleccionado);
+        LocalTime horaInicio;
+
+        switch (horarioSeleccionado) {
+            case "00:00 - 06:00": horaInicio = LocalTime.of(0, 0); break;
+            case "06:00 - 12:00": horaInicio = LocalTime.of(6, 0); break;
+            case "12:00 - 18:00": horaInicio = LocalTime.of(12, 0); break;
+            case "18:00 - 00:00": horaInicio = LocalTime.of(18, 0); break;
+            default:
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Horario inválido", null));
+                return;
+        }
+
+        LocalDateTime ldt = LocalDateTime.of(localDate, horaInicio);
+        reserva.setFecha(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()));
+
 
         EntityManager em = emf.createEntityManager();
 
@@ -125,7 +161,6 @@ public class ReservaBean implements Serializable {
             if (reserva.getFecha() != null) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(reserva.getFecha());
-                cal.add(Calendar.DATE, 1);
                 reserva.setFecha(cal.getTime());
             }
 
@@ -177,13 +212,6 @@ public class ReservaBean implements Serializable {
         //reserva.setHorarioSeleccionado(horarioSeleccionado);
         //reserva.setFecha(new SimpleDateFormat("yyyy-MM-dd").parse(diaSeleccionado);
     }
-    public void verificarSesion() {
-        Object user = FacesContext.getCurrentInstance()
-                .getExternalContext()
-                .getSessionMap()
-                .get("usuario");
-        System.out.println("Usuario en sesión: " + user);
-    }
 
     public void actualizarDiasDisponibles(jakarta.faces.event.AjaxBehaviorEvent event) {
         if (idEspacio != null) {
@@ -205,10 +233,59 @@ public class ReservaBean implements Serializable {
     }
 
     public void actualizarHorariosDisponibles(AjaxBehaviorEvent event) {
-        if (diaSeleccionado != null) {
-            horariosDisponibles = generarHorariosDe6Horas();
+        // El valor ya está asignado por JSF en diaSeleccionado
+        this.horariosDisponibles = obtenerHorariosDisponibles(idEspacio, diaSeleccionado);
+    }
+
+
+    private String obtenerBloquePorHora(Date fecha) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fecha);
+        int hora = cal.get(Calendar.HOUR_OF_DAY);
+
+        if (hora >= 0 && hora < 6) return "00:00 - 06:00";
+        if (hora >= 6 && hora < 12) return "06:00 - 12:00";
+        if (hora >= 12 && hora < 18) return "12:00 - 18:00";
+        return "18:00 - 00:00";
+    }
+
+
+
+    private List<String> obtenerHorariosDisponibles(Long idEspacio, String dia) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Date fechaInicio = java.sql.Date.valueOf(dia);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fechaInicio);
+            cal.add(Calendar.DATE, 1);
+            Date fechaFin = cal.getTime();
+
+            List<Reserva> reservas = em.createQuery(
+                            "SELECT r FROM Reserva r WHERE r.espacio.id = :idEspacio AND r.fecha >= :inicio AND r.fecha < :fin",
+                            Reserva.class
+                    )
+                    .setParameter("idEspacio", idEspacio)
+                    .setParameter("inicio", fechaInicio)
+                    .setParameter("fin", fechaFin)
+                    .getResultList();
+
+            List<String> bloques = new ArrayList<>(List.of(
+                    "00:00 - 06:00", "06:00 - 12:00",
+                    "12:00 - 18:00", "18:00 - 00:00"
+            ));
+
+            for (Reserva r : reservas) {
+                String bloque = obtenerBloquePorHora(r.getFecha());
+                bloques.remove(bloque); // elimina el bloque ocupado
+            }
+
+            return bloques;
+
+        } finally {
+            em.close();
         }
     }
+
 
 
     private List<String> generarHorariosDe6Horas() {
