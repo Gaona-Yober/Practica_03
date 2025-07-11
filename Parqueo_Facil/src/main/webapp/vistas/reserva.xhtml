@@ -46,7 +46,8 @@
                         <f:selectItem itemLabel="Seleccione un espacio" itemValue="" />
                         <f:selectItems value="#{reservaBean.espacios}" var="espacio"
                                        itemValue="#{espacio.id}"
-                                       itemLabel="Ubicación: #{espacio.ubicacion} | Espacio: #{espacio.numero}" />
+                                       itemLabel="Ubicación: #{espacio.ubicacion} - Espacio: #{espacio.numero}
+                                       - Capacidad vehículos: #{espacio.capacidad}" />
                         <f:ajax event="change"
                                 listener="#{reservaBean.actualizarDiasDisponibles}"
                                 render="dias horarios"
@@ -90,6 +91,8 @@
                     <h:commandButton value="Confirmar Reserva"
                                      action="#{reservaBean.guardar}"
                                      styleClass="btn btn-primary" />
+                    <h:commandButton value="Reservar Otro Espacio"
+                                     action="reserva" styleClass="btn btn-secondary" />
                 </div>
 
             </h:form>
