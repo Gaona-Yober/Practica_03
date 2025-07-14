@@ -2,22 +2,27 @@ package unl.edu.poo.jakarta.modelo;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "espacios")
 public class Espacio {
+
+
+    // Atributos
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String numero;      // Ej: "Parqueo Norte A"
-    private String ubicacion;   // Ej: "Bloque 1 - Subsuelo"
-    private int capacidad;      // Ej: 1 auto por espacio
+    private String numero;
+    private String ubicacion;
+    private int capacidad;
 
-    public Espacio() {}
+    // Constructore
+    public Espacio() {
+        // Constructor por defecto requerido por JPA
+    }
 
-    // Getters y Setters
+    // Mettodos
     public Long getId() {
         return id;
     }
@@ -30,8 +35,8 @@ public class Espacio {
         return numero;
     }
 
-    public void setNumero(String nombre) {
-        this.numero = nombre;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     public String getUbicacion() {
@@ -49,6 +54,7 @@ public class Espacio {
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -61,5 +67,4 @@ public class Espacio {
     public int hashCode() {
         return 31;
     }
-
 }

@@ -2,10 +2,11 @@ package unl.edu.poo.jakarta.bean;
 
 import jakarta.annotation.ManagedBean;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
 import unl.edu.poo.jakarta.modelo.Usuario;
-
 import java.io.Serializable;
 
 @Named
@@ -13,11 +14,12 @@ import java.io.Serializable;
 @SessionScoped
 public class LoginBean implements Serializable {
 
+    // Atributos
     private String usuario;
     private String contrasenia;
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
-
+    // Método de autenticación
     public String verificarLogin() {
         EntityManager em = emf.createEntityManager();
 
@@ -31,8 +33,7 @@ public class LoginBean implements Serializable {
             Usuario resultado = query.getSingleResult();
 
             if (resultado != null) {
-                // guardar el usuario en la sesión con la clave "usuario"
-                jakarta.faces.context.FacesContext.getCurrentInstance()
+                FacesContext.getCurrentInstance()
                         .getExternalContext()
                         .getSessionMap()
                         .put("usuario", resultado);
@@ -40,15 +41,14 @@ public class LoginBean implements Serializable {
                 return "/vistas/reserva.xhtml?faces-redirect=true";
             }
         } catch (NoResultException e) {
-            // Usuario no encontrado
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close();
         }
-
-        jakarta.faces.context.FacesContext.getCurrentInstance()
-                .addMessage(null, new jakarta.faces.application.FacesMessage("Usuario o contraseña incorrectos"));
+        FacesContext.getCurrentInstance()
+                .addMessage(null,
+                        new FacesMessage("Usuario o contraseña incorrectos"));
 
         return null;
     }
@@ -69,5 +69,4 @@ public class LoginBean implements Serializable {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
-
 }

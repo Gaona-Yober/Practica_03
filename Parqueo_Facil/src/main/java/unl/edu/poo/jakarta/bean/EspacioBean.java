@@ -1,5 +1,7 @@
 package unl.edu.poo.jakarta.bean;
 
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
@@ -12,16 +14,15 @@ import java.util.Map;
 @Named
 @ViewScoped
 public class EspacioBean implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
 
+    // Atributos
     private Espacio espacio = new Espacio();
     private Espacio espacioSeleccionado = new Espacio();
     private Map<String, List<Espacio>> espaciosPorUbicacion;
 
-
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
-
+    // Getters y Setters
     public Espacio getEspacio() {
         return espacio;
     }
@@ -38,7 +39,11 @@ public class EspacioBean implements Serializable {
         this.espacioSeleccionado = espacioSeleccionado;
     }
 
-    // Crear nuevo espacio
+    public Map<String, List<Espacio>> getEspaciosPorUbicacion() {
+        return espaciosPorUbicacion;
+    }
+
+    // Métodos CRUD
     public void guardar() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -46,20 +51,20 @@ public class EspacioBean implements Serializable {
             em.persist(espacio);
             em.getTransaction().commit();
             espacio = new Espacio(); // limpiar formulario
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Éxito", "Espacio creado correctamente"));
         } catch (Exception e) {
             em.getTransaction().rollback();
             e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error", "No se pudo crear el espacio"));
         } finally {
             em.close();
         }
     }
 
-    // Llenar para editar
-    public void editar(Espacio espacio) {
-        this.espacioSeleccionado = espacio;
-    }
-
-    // Actualizar espacio
     public void actualizar() {
         EntityManager em = emf.createEntityManager();
         try {
@@ -75,15 +80,6 @@ public class EspacioBean implements Serializable {
         }
     }
 
-    // Listar todos los espacios
-    public List<Espacio> getEspacios() {
-        EntityManager em = emf.createEntityManager();
-        List<Espacio> lista = em.createQuery("SELECT e FROM Espacio e", Espacio.class).getResultList();
-        em.close();
-        return lista;
-    }
-
-    // (Opcional) Eliminar espacio
     public void eliminar(Espacio espacio) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -101,9 +97,16 @@ public class EspacioBean implements Serializable {
         }
     }
 
-    public Map<String, List<Espacio>> getEspaciosPorUbicacion() {
-        return espaciosPorUbicacion;
+    // Métodos de consulta
+    public List<Espacio> getEspacios() {
+        EntityManager em = emf.createEntityManager();
+        List<Espacio> lista = em.createQuery("SELECT e FROM Espacio e", Espacio.class).getResultList();
+        em.close();
+        return lista;
     }
 
-
+    // Métodos auxiliares
+    public void editar(Espacio espacio) {
+        this.espacioSeleccionado = espacio;
+    }
 }

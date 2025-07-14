@@ -7,9 +7,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.*;
-import unl.edu.poo.jakarta.modelo.Espacio;
 import unl.edu.poo.jakarta.modelo.Usuario;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,52 +18,43 @@ public class UsuarioBean implements Serializable {
     @PersistenceContext(unitName = "reservaPU")
     private EntityManager entityManager;
 
+    // Fábrica de EntityManager (para operaciones fuera de contenedor)
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
+
     private Usuario usuario = new Usuario();
     private Usuario em;
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
-
-    public Usuario getUsuario() {return usuario;}
-
-    public void setUsuario(Usuario usuario) {this.usuario = usuario;}
-
+    // MÉTODOS PRINCIPALES
     public void guardar() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
         EntityManager em = emf.createEntityManager();
-
         try {
-            // Verificar si ya existe un usuario con ese nombre
-            TypedQuery<Usuario> query = em.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.nombre = :nombre", Usuario.class);
-            query.setParameter("nombre", usuario.getNombre());
-
-            if (!query.getResultList().isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                "El nombre de usuario ya está en uso", null));
+            // Validar si el nombre de usuario ya existe
+            if (existeNombreUsuario(usuario.getNombre(), em)) {
+                mostrarMensaje(FacesMessage.SEVERITY_ERROR,
+                        "El nombre de usuario ya está en uso");
                 return;
             }
 
+            // Persistir el usuario
             em.getTransaction().begin();
             em.persist(usuario);
             em.getTransaction().commit();
 
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Usuario registrado correctamente", null));
+            mostrarMensaje(FacesMessage.SEVERITY_INFO,
+                    "Usuario registrado correctamente");
 
-            usuario = new Usuario(); // limpiar formulario
+            // Limpiar el formulario
+            usuario = new Usuario();
 
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             e.printStackTrace();
-
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "Error al registrar el usuario", null));
+            mostrarMensaje(FacesMessage.SEVERITY_ERROR,
+                    "Error al registrar el usuario");
         } finally {
             em.close();
-            emf.close();
         }
     }
 
@@ -73,6 +62,27 @@ public class UsuarioBean implements Serializable {
         return entityManager.find(Usuario.class, id);
     }
 
+    // MÉTODOS AUXILIARES
+    private boolean existeNombreUsuario(String nombre, EntityManager em) {
+        TypedQuery<Usuario> query = em.createQuery(
+                "SELECT u FROM Usuario u WHERE u.nombre = :nombre",
+                Usuario.class);
+        query.setParameter("nombre", nombre);
+        return !query.getResultList().isEmpty();
+    }
+
+    private void mostrarMensaje(FacesMessage.Severity severidad, String mensaje) {
+        FacesContext.getCurrentInstance()
+                .addMessage(null, new FacesMessage(severidad, mensaje, null));
+    }
 
 
+    // Getters y Setters
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

@@ -1,26 +1,19 @@
 package unl.edu.poo.jakarta.modelo;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
-
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
 
 @Entity
 @Table(name = "reservas")
 public class Reserva {
 
+    // Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-
-
-
 
     @ManyToOne
     private Usuario usuario;
@@ -29,11 +22,12 @@ public class Reserva {
     private Espacio espacio;
 
 
-    public Reserva() {}
+    // Constructor
+    public Reserva() {
+        // Constructor por defecto requerido por JPA
+    }
 
-    // Getters y setters
-
-
+    //Metodos
     public Long getId() {
         return id;
     }
@@ -65,4 +59,18 @@ public class Reserva {
     public void setEspacio(Espacio espacio) {
         this.espacio = espacio;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reserva reserva = (Reserva) o;
+        return id != null && id.equals(reserva.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

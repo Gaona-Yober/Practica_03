@@ -6,20 +6,26 @@ import jakarta.persistence.*;
 @Table(name = "usuarios")
 public class Usuario {
 
+    // Atributos
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String nombre;
 
+    @Column(nullable = false, unique = true)
     private String correo;
 
+    @Column(nullable = false)
     private String contrasenia;
 
-    // Constructor vacío requerido por JPA
+
+    // Constructor
     public Usuario() {}
 
-    // Getters y setters
+    //Metodos
     public Long getId() {
         return id;
     }
@@ -53,16 +59,15 @@ public class Usuario {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Usuario other = (Usuario) obj;
-        return id != null && id.equals(other.getId());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return id != null && id.equals(usuario.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return getClass().hashCode();
     }
-
 }

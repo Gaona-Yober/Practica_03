@@ -9,10 +9,12 @@ import java.io.Serializable;
 @SessionScoped
 public class LoginAdminBean implements Serializable {
 
+    // Atributos
     private String usuario;
     private String contrasena;
     private boolean autenticado = false;
 
+    // Métodos de autenticación
     public String login() {
         if ("admin".equals(usuario) && "admin123".equals(contrasena)) {
             autenticado = true;
