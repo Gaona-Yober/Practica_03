@@ -1,56 +1,52 @@
 package unl.edu.poo.jakarta.bean;
 
-import jakarta.annotation.ManagedBean;
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.*;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.application.FacesMessage;
 import unl.edu.poo.jakarta.modelo.Usuario;
+import unl.edu.poo.jakarta.negocio.SecurityFacade;
+import unl.edu.poo.jakarta.sesion.UserSession;
+import unl.edu.poo.jakarta.util.FacesUtil;
+import unl.edu.poo.jakarta.security.UserPrincipal;
+
 import java.io.Serializable;
 
 @Named
-@ManagedBean
-@SessionScoped
+@ViewScoped
 public class LoginBean implements Serializable {
 
-    // Atributos
     private String usuario;
     private String contrasenia;
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("reservaPU");
 
-    // Método de autenticación
-    public String verificarLogin() {
-        EntityManager em = emf.createEntityManager();
+    @Inject
+    private SecurityFacade securityFacade;
 
+    @Inject
+    private UserSession userSession;
+
+    public String login() {
         try {
-            TypedQuery<Usuario> query = em.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.nombre = :usuario AND u.contrasenia = :contrasenia",
-                    Usuario.class);
-            query.setParameter("usuario", usuario);
-            query.setParameter("contrasenia", contrasenia);
+            Usuario u = securityFacade.autenticar(usuario, contrasenia);
+            userSession.login(u);
 
-            Usuario resultado = query.getSingleResult();
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                    .put("usuario", u);
 
-            if (resultado != null) {
-                FacesContext.getCurrentInstance()
-                        .getExternalContext()
-                        .getSessionMap()
-                        .put("usuario", resultado);
-
-                return "/vistas/reserva.xhtml?faces-redirect=true";
-            }
-        } catch (NoResultException e) {
+            FacesUtil.mensajeInfo("Bienvenido " + u.getNombre());
+            return "/vistas/reserva.xhtml?faces-redirect=true";
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            em.close();
+            FacesUtil.mensajeError(e.getMessage());
+            return null;
         }
-        FacesContext.getCurrentInstance()
-                .addMessage(null,
-                        new FacesMessage("Usuario o contraseña incorrectos"));
+    }
 
-        return null;
+    public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        userSession.logout();
+        FacesUtil.mensajeInfo("Sesión cerrada exitosamente");
+        return "/login.xhtml?faces-redirect=true";
     }
 
     // Getters y Setters

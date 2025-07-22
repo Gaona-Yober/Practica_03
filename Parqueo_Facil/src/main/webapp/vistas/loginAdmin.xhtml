@@ -1,37 +1,268 @@
-<!DOCTYPE html>
+<!DOCTYPE html [  <!ENTITY display "entity-value">
+  <!ENTITY auto "entity-value">
+  <!ENTITY fit "entity-value">
+  <!ENTITY w "entity-value">
+  <!ENTITY q "entity-value">
+]>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
       lang="es">
 <h:head>
-    <title>Login Admin</title>
-    <link href="/resources/css/loginAdmin.css" rel="stylesheet" type="text/css" />
+    <title>Login Administrador | ParqueoFacil</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display;=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        :root {
+            --primary-dark: #003366;
+            --primary-medium: #0066cc;
+            --primary-light: #66ccff;
+            --primary-extra-light: #f5f9ff;
+            --white: #ffffff;
+            --error: #e74c3c;
+            --shadow: 0 4px 20px rgba(0, 51, 102, 0.1);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-extra-light);
+            color: var(--primary-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(245, 249, 255, 0.9), rgba(245, 249, 255, 0.9)),
+            url('https://images.unsplash.com/photo-1483721310020-03333e577078?ixlib=rb-1.2.1&auto;=format&fit;=crop&w;=1350&q;=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            background-color: var(--white);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem;
+            border-top: 5px solid var(--primary-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary-light));
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-light);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-medium);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.5rem;
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background-color: var(--primary-extra-light);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(102, 204, 255, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 2.7rem;
+            color: var(--primary-medium);
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 2rem 0 1rem;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-medium);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 51, 102, 0.2);
+        }
+
+        .btn-volver {
+            display: block;
+            text-align: center;
+            color: var(--primary-medium);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-volver:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .error-message {
+            display: block;
+            color: var(--error);
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .ui-messages {
+            width: 100%;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            list-style: none;
+        }
+
+        .ui-messages-error {
+            background-color: #fdecea;
+            color: var(--error);
+            border: 1px solid #f5c6cb;
+        }
+
+        .ui-message-error {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo i {
+            color: var(--primary-medium);
+            font-size: 2.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-top: 0.5rem;
+        }
+
+        .logo-text span {
+            color: var(--primary-light);
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </h:head>
 <h:body>
     <div class="container">
+        <div class="logo">
+            <i class="fas fa-parking"></i>
+            <div class="logo-text">Parqueo<span>Facil</span></div>
+        </div>
 
-        <h1>Inicio de Administrador</h1>
+        <h1>Panel de Administración</h1>
 
         <h:form>
             <div class="form-group">
-                <h:outputLabel value="Usuario: " />
-                <h:inputText value="#{loginAdminBean.usuario}"
-                                styleClass="form-control" required="true"/>
+                <h:outputLabel for="usuario" value="Usuario" />
+                <i class="fas fa-user input-icon"></i>
+                <h:inputText id="usuario" value="#{loginAdminBean.usuario}"
+                             styleClass="form-control" required="true"
+                             placeholder="Ingrese su usuario"/>
+                <h:message for="usuario" styleClass="ui-message-error" />
             </div>
 
             <div class="form-group">
-                <h:outputLabel value="Contraseña: " />
-                <h:inputSecret value="#{loginAdminBean.contrasena}" styleClass="form-control" required="true"/>
+                <h:outputLabel for="contraseña" value="Contraseña" />
+                <i class="fas fa-lock input-icon"></i>
+                <h:inputSecret id="contraseña" value="#{loginAdminBean.contrasena}"
+                               styleClass="form-control" required="true"
+                               placeholder="Ingrese su contraseña"/>
+                <h:message for="contraseña" styleClass="ui-message-error" />
             </div>
 
-            <h:commandButton  value="Entrar" action="#{loginAdminBean.login}" styleClass="btn"/>
-            <h:outputLink value="/vistas/inicio.html" styleClass="btn-volver">← Volver a inicio</h:outputLink>
-            <h:messages />
+            <h:commandButton value="Iniciar Sesión" action="#{loginAdminBean.login}"
+                             styleClass="btn"/>
+            <h:messages globalOnly="true" styleClass="ui-messages ui-messages-error" />
+
+            <h:outputLink value="/vistas/inicio.html" styleClass="btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </h:outputLink>
         </h:form>
+
+        <h:outputText value="#{flash.mensaje}" styleClass="error-message" rendered="#{not empty flash.mensaje}" />
     </div>
-    <h:outputText value="#{flash.mensaje}" styleClass="error-message" />
 </h:body>
 </html>

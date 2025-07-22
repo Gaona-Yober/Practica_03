@@ -30,6 +30,10 @@
                 <h:column>
                     <f:facet name="header">Acción</f:facet>
                     <h:commandButton value="Editar" action="#{espacioBean.editar(e)}" styleClass="btn" />
+                    <h:commandButton value="Eliminar"
+                                     action="#{espacioBean.eliminar(e)}"
+                                     styleClass="btn btn-danger"
+                                     onclick="return confirm('¿Estás seguro de que deseas eliminar este espacio?');" />
                 </h:column>
 
             </h:dataTable>
@@ -45,7 +49,7 @@
                 <h:outputLabel value="Numero:" styleClass="form-label" />
                 <h:inputText value="#{espacioBean.espacioSeleccionado.numero}" styleClass="form-input" />
 
-                <h:outputText value="Capacidad" styleClass="form-label" />
+                <h:outputText value="Capacidad vehículos" styleClass="form-label" />
                 <h:inputText value="#{espacioBean.espacioSeleccionado.capacidad}" styleClass="form-input" />
 
                 <h:outputLabel />
