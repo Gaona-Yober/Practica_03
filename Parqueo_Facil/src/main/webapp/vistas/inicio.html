@@ -1,252 +1,32 @@
-<!DOCTYPE html [  <!ENTITY copy "entity-value">
+<!DOCTYPE html [  <!ENTITY auto "entity-value">
+  <!ENTITY fit "entity-value">
+  <!ENTITY w "entity-value">
+  <!ENTITY q "entity-value">
+]>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parqueo Facil - Reserva de Parqueaderos</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Parqueo Facil - Reserva de Parqueaderos Inteligente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="/resources/css/inicio.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 
-        body {
-            background-color: #f5f9ff;
-            color: #003366;
-        }
-
-        header {
-            background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.1);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .logo span {
-            color: #66ccff;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 2rem;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #66ccff;
-        }
-
-        .hero {
-            background-color: #66ccff;
-            padding: 4rem 0;
-            text-align: center;
-            color: white;
-            margin-bottom: 3rem;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: #003366;
-            color: white;
-            padding: 0.8rem 1.8rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #0066cc;
-            transform: translateY(-2px);
-        }
-
-        .search-box {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 51, 102, 0.1);
-            max-width: 800px;
-            margin: -2rem auto 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .search-box h2 {
-            color: #003366;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .search-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #0066cc;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #66ccff;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .features {
-            padding: 4rem 0;
-            background-color: white;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            color: #003366;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background-color: #f5f9ff;
-            padding: 2rem;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #0066cc;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            color: #003366;
-        }
-
-        footer {
-            background-color: #003366;
-            color: white;
-            padding: 3rem 0 1.5rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-column h3 {
-            color: #66ccff;
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-column ul li a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-column ul li a:hover {
-            color: #66ccff;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-        }
-    </style>
-    </meta>
-    </meta>
 </head>
 <body>
-<header>
+<header id="main-header">
     <div class="container">
         <div class="header-content">
-            <div class="logo">Parqueo<span>Facil</span></div>
+            <div class="logo">
+                <i class="fas fa-parking logo-icon"></i>Parqueo<span>Facil</span>
+            </div>
             <nav>
                 <ul>
                     <li><a href="#">Inicio</a></li>
                     <li><a href="#">Cómo funciona</a></li>
                     <li><a href="#">Precios</a></li>
                     <li><a href="#">Contacto</a></li>
-
-                    <li><a href="/vistas/loginAdmin.xhtml" class="btn">Admin</a></li>
+                    <li><a href="/vistas/loginAdmin.xhtml" class="btn btn-light">Admin</a></li>
                 </ul>
             </nav>
         </div>
@@ -254,38 +34,94 @@
 </header>
 
 <section class="hero">
-    <div class="container">
+    <div class="container hero-content">
         <h1>Reserva tu parqueadero en segundos</h1>
-        <p>Encuentra y reserva los mejores espacios de estacionamiento cerca de ti al mejor precio.</p>
-        <a href="/vistas/registro.xhtml" class="btn">Registrarse</a><a href="/vistas/inicioSecion.xhtml" class="btn">Iniciar secion</a>
+        <p>Encuentra y reserva los mejores espacios de estacionamiento cerca de ti, con precios transparentes y disponibilidad en tiempo real.</p>
+        <div class="hero-buttons">
+            <a href="/vistas/registro.xhtml" class="btn">Registrarse</a>
+            <a href="/vistas/inicioSecion.xhtml" class="btn btn-outline">Iniciar Sesión</a>
+        </div>
     </div>
 </section>
 
 
 <section class="features">
     <div class="container">
-        <h2 class="section-title">Por qué elegir ParqueoFacil</h2>
+        <div class="section-title">
+            <h2>Por qué elegir ParqueoFacil</h2>
+            <p>La solución más inteligente para tus necesidades de estacionamiento</p>
+        </div>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">⏱️</div>
-                <h3>Ahorra tiempo</h3>
-                <p>Encuentra y reserva parqueaderos disponibles en tiempo real sin dar vueltas.</p>
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Reserva instantánea</h3>
+                <p>Garantiza tu espacio en segundos desde nuestra app o sitio web, sin esperas ni complicaciones.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">💰</div>
-                <h3>Mejores precios</h3>
-                <p>Accede a tarifas competitivas y descuentos exclusivos en tu ciudad.</p>
+                <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+                <h3>Precios competitivos</h3>
+                <p>Accede a las mejores tarifas con descuentos exclusivos y sin costos ocultos.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3>Seguridad garantizada</h3>
-                <p>Todos nuestros parqueaderos son verificados y cuentan con seguridad 24/7.</p>
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Seguridad 24/7</h3>
+                <p>Todos nuestros parqueaderos son verificados y monitoreados constantemente.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🚗</div>
+                <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
                 <h3>Cobertura nacional</h3>
-                <p>Disponible en las principales ciudades del país con miles de opciones.</p>
+                <p>Miles de opciones disponibles en las principales ciudades del país.</p>
             </div>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="container stats-container">
+        <div class="stat-item">
+            <div class="stat-number">10,000+</div>
+            <div class="stat-label">Espacios disponibles</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">500,000+</div>
+            <div class="stat-label">Reservas mensuales</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Satisfacción de usuarios</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Soporte disponible</div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="container">
+        <div class="section-title">
+            <h2>Lo que dicen nuestros usuarios</h2>
+            <p>Experiencias reales de personas que usan ParqueoFacil</p>
+        </div>
+        <div class="testimonial-slider">
+            <div class="testimonial-item">
+                <div class="testimonial-text">
+                    "ParqueoFacil ha cambiado completamente mi rutina diaria.
+                    Ya no pierdo tiempo buscando estacionamiento cerca de mi trabajo. ¡Totalmente recomendado!"
+                </div>
+                <div class="testimonial-author">- María G., Quito</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2>¿Listo para estacionar sin estrés?</h2>
+        <p>Descarga nuestra app y reserva tu parqueadero en cualquier momento y lugar.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn"><i class="fab fa-apple"></i> App Store</a>
+            <a href="#" class="btn btn-light"><i class="fab fa-google-play"></i> Google Play</a>
         </div>
     </div>
 </section>
@@ -295,7 +131,13 @@
         <div class="footer-content">
             <div class="footer-column">
                 <h3>ParqueoFacil</h3>
-                <p>La solución más sencilla para reservar parqueaderos cuando y donde los necesites.</p>
+                <p>La solución más inteligente para reservar parqueaderos cuando y donde los necesites.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
             </div>
             <div class="footer-column">
                 <h3>Enlaces rápidos</h3>
@@ -303,7 +145,8 @@
                     <li><a href="#">Inicio</a></li>
                     <li><a href="#">Cómo funciona</a></li>
                     <li><a href="#">Precios</a></li>
-                    <li><a href="#">Ciudades</a></li>
+                    <li><a href="#">Ciudades disponibles</a></li>
+                    <li><a href="#">Preguntas frecuentes</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -312,21 +155,35 @@
                     <li><a href="#">Términos y condiciones</a></li>
                     <li><a href="#">Política de privacidad</a></li>
                     <li><a href="#">Cookies</a></li>
+                    <li><a href="#">Aviso legal</a></li>
                 </ul>
             </div>
             <div class="footer-column">
                 <h3>Contacto</h3>
                 <ul>
-                    <li><a href="#">info@parqueofacil.com</a></li>
-                    <li><a href="#">+593 993 677 375</a></li>
-                    <li><a href="#">Soporte 24/7</a></li>
+                    <li><a href="mailto:info@parqueofacil.com"><i class="fas fa-envelope"></i> info@parqueofacil.com</a></li>
+                    <li><a href="tel:+593993677375"><i class="fas fa-phone-alt"></i> +593 993 677 375</a></li>
+                    <li><a href="#"><i class="fas fa-headset"></i> Soporte 24/7</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Amazonas N34-451, Quito</a></li>
                 </ul>
             </div>
         </div>
         <div class="copyright">
-            &copy; 2023 ParqueoFacil. Todos los derechos reservados.
+            2025 ParqueoFacil. Todos los derechos reservados.
         </div>
     </div>
 </footer>
+
+<script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('main-header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+</script>
 </body>
 </html>

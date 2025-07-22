@@ -2,10 +2,28 @@
     <featureManager>
         <feature>webProfile-10.0</feature>
     </featureManager>
+
+    <library id="MySQLLib">
+        <fileset dir="C:\Users\julit\.m2\repository\com\mysql\mysql-connector-j\9.3.0\" includes="mysql-connector-j-9.3.0.jar"/>
+    </library>
+
+    <dataSource id="reservasDS" jndiName="jdbc/reservasDS">
+        <jdbcDriver libraryRef="MySQLLib"/>
+        <properties
+                databaseName="reservas_db"
+                user="root"
+                password="yobay"
+                serverName="localhost"
+                portNumber="3306"/>
+    </dataSource>
+
     <basicRegistry id="defaultBasicRegistry" realm="BasicRealm">
         <user name="username" password="password" />
     </basicRegistry>
+
     <keyStore id="defaultKeyStore" password="password" />
+
     <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080" httpsPort="9443" />
+
     <webApplication location="Parqueo_Facil.war" contextRoot="/"/>
 </server>
