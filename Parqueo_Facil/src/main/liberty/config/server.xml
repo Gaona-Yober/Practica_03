@@ -1,10 +1,11 @@
-<server description="defaultServer">
+<server description="Parqueo Facil Server">
     <featureManager>
         <feature>webProfile-10.0</feature>
+        <feature>jdbc-4.2</feature>
     </featureManager>
 
     <library id="MySQLLib">
-        <fileset dir="C:\Users\julit\.m2\repository\com\mysql\mysql-connector-j\9.3.0\" includes="mysql-connector-j-9.3.0.jar"/>
+        <fileset dir="${shared.resource.dir}" includes="mysql-connector-java-8.0.26.jar"/>
     </library>
 
     <dataSource id="reservasDS" jndiName="jdbc/reservasDS">
@@ -13,17 +14,25 @@
                 databaseName="reservas_db"
                 user="root"
                 password="yobay"
-                serverName="localhost"
-                portNumber="3306"/>
+                serverName="db"
+                portNumber="3306"
+                useSSL="false"
+                allowPublicKeyRetrieval="true"
+                useUnicode="true"
+                characterEncoding="UTF-8"
+                serverTimezone="UTC"
+                connectionTimeout="30"
+                validationQuery="SELECT 1"
+                initialPoolSize="5"
+                minPoolSize="5"
+                maxPoolSize="20"
+                maxIdleTime="300"/>
     </dataSource>
 
-    <basicRegistry id="defaultBasicRegistry" realm="BasicRealm">
-        <user name="username" password="password" />
-    </basicRegistry>
-
-    <keyStore id="defaultKeyStore" password="password" />
-
-    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080" httpsPort="9443" />
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="9080"
+                  httpsPort="9443" />
 
     <webApplication location="Parqueo_Facil.war" contextRoot="/"/>
 </server>

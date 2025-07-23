@@ -1,5 +1,6 @@
 package unl.edu.poo.jakarta.bean;
 
+import jakarta.ejb.EJB;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,7 +19,7 @@ public class EspacioBean implements Serializable {
     private Espacio espacio = new Espacio();
     private Espacio espacioSeleccionado;
 
-    @Inject
+    @EJB
     private EspacioFacade espacioFacade;
 
     public void guardar() {
