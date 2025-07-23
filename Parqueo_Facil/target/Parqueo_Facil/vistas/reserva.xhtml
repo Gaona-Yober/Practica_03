@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      lang="es">
+
+<h:head>
+    <title>Reserva de Estacionamiento</title>
+    <link href="/resources/css/reserva.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</h:head>
+
+<h:body>
+    <f:view>
+        <div class="container">
+            <div class="header">
+                <h1>Registrar Reserva de Estacionamiento</h1>
+                <h:outputLink value="/vistas/inicio.html" styleClass="btn-volver">
+                    ← Volver a inicio
+                </h:outputLink>
+            </div>
+
+            <h:messages globalOnly="true" styleClass="messages"
+                        rendered="#{not empty facesContext.messageList}" />
+
+            <h:form styleClass="reserva-form">
+
+                <!-- Fecha -->
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <strong>Usuario:</strong>
+                        <div class="user-display">
+                            <h:outputText value="#{reservaBean.usuarioLogueado.nombre}" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Espacios -->
+                <h2 class="section-title">Seleccione un espacio</h2>
+                <div class="form-group">
+                    <h:outputLabel for="espacio" value="Espacio:" />
+                    <h:selectOneMenu id="espacio" value="#{reservaBean.idEspacio}" styleClass="form-control">
+                        <f:selectItem itemLabel="Seleccione un espacio" itemValue="" />
+                        <f:selectItems value="#{reservaBean.espacios}" var="espacio"
+                                       itemValue="#{espacio.id}"
+                                       itemLabel="Ubicación: #{espacio.ubicacion} - Espacio: #{espacio.numero}
+                                       - Capacidad vehículos: #{espacio.capacidad}" />
+                        <f:ajax event="change"
+                                listener="#{reservaBean.actualizarDiasDisponibles}"
+                                render="dias horarios"
+                                immediate="true" />
+                    </h:selectOneMenu>
+                </div>
+
+                <!-- Días disponibles -->
+                <h:panelGroup id="dias">
+                    <h:panelGroup rendered="#{not empty reservaBean.diasDisponibles}">
+                        <div class="form-group">
+                            <h:outputLabel for="dia" value="Día disponible:" />
+                            <h:inputText id="dia" value="#{reservaBean.diaSeleccionado}" styleClass="form-control" required="true">
+                                <f:passThroughAttribute name="type" value="date" />
+                                <f:ajax listener="#{reservaBean.actualizarHorariosDisponibles}" render="horarios" event="change" />
+                            </h:inputText>
+
+
+
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <!-- Horarios disponibles -->
+                <h:panelGroup id="horarios">
+                    <h:panelGroup rendered="#{not empty reservaBean.horariosDisponibles}">
+                        <div class="form-group">
+                            <h:outputLabel for="horario" value="Horario disponible:" />
+                            <h:selectOneMenu id="horario"
+                                             value="#{reservaBean.horarioSeleccionado}"
+                                             styleClass="form-control">
+                                <f:selectItem itemLabel="Seleccione un horario" itemValue="" />
+                                <f:selectItems value="#{reservaBean.horariosDisponibles}" />
+                            </h:selectOneMenu>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <!-- Confirmar -->
+                <div class="form-actions">
+                    <h:commandButton value="Confirmar Reserva"
+                                     action="#{reservaBean.guardar}"
+                                     styleClass="btn btn-primary" />
+                    <h:commandButton value="Reservar Otro Espacio"
+                                     action="reserva" styleClass="btn btn-secondary" />
+                </div>
+
+            </h:form>
+        </div>
+    </f:view>
+</h:body>
+</html>

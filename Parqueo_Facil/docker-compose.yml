@@ -1,0 +1,58 @@
+services:
+  parqueo-facil:
+    build: .
+    ports:
+      - "9080:9080"   # Puerto HTTP de Open Liberty
+      - "9443:9443"   # Puerto HTTPS de Open Liberty
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - parqueo-network
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: yobay
+      MYSQL_DATABASE: reservas_db
+      MYSQL_ROOT_HOST: '%'
+      TZ: UTC  # Zona horaria consistente
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --wait_timeout=28800
+      - --interactive_timeout=28800
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3308:3306"  # Puerto mapeado para acceso externo
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pyobay"]
+      interval: 10s
+      timeout: 30s
+      retries: 15
+    networks:
+      - parqueo-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8088:80"   # puerto 8081 en host, 80 dentro del contenedor
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+    networks:
+      - parqueo-network
+
+
+volumes:
+  mysql_data:
+
+networks:
+  parqueo-network:
+    driver: bridge

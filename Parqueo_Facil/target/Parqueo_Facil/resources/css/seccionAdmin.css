@@ -1,0 +1,107 @@
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 139, 0.1);
+}
+
+h1 {
+    color: #000000; /* Azul oscuro */
+    border-bottom: 2px solid #000000; /* Azul acero */
+    padding-bottom: 10px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.data-table th {
+    background-color: #1e90ff; /* Azul dodger */
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.data-table td {
+    padding: 10px;
+    border-bottom: 1px solid #d4e6f7;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #e6f2ff; /* Azul muy claro */
+}
+
+.data-table tr:hover {
+    background-color: #cce0ff; /* Azul claro */
+}
+
+.btn {
+    background-color: #4682b4; /* Azul acero */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #36648b; /* Azul acero más oscuro */
+}
+
+.btn-primary {
+    background-color: #1e90ff; /* Azul dodger */
+}
+
+.btn-primary:hover {
+    background-color: #187bcd; /* Azul dodger más oscuro */
+}
+
+.form-panel {
+    background-color: #e6f2ff; /* Azul muy claro */
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid #b0c4de; /* Azul claro */
+}
+
+.form-label {
+    color: #003366; /* Azul oscuro */
+    font-weight: bold;
+}
+
+.form-input {
+    padding: 8px;
+    border: 1px solid #b0c4de;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.add-space-link {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.add-space-link:hover {
+    background-color: #2980b9;
+}

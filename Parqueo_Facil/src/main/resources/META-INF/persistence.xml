@@ -5,19 +5,10 @@
 
     <persistence-unit name="reservaPU" transaction-type="JTA">
         <jta-data-source>jdbc/reservasDS</jta-data-source>
-
-        <class>unl.edu.poo.jakarta.modelo.Usuario</class>
-        <class>unl.edu.poo.jakarta.modelo.Reserva</class>
-        <class>unl.edu.poo.jakarta.modelo.Espacio</class>
-
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="true"/>
-
-            <property name="eclipselink.ddl-generation" value="none"/>
-            <property name="eclipselink.logging.level" value="WARNING"/>
-            <property name="eclipselink.register-mbean" value="false"/>
+            <property name="javax.persistence.schema-generation.database.action" value="update"/>
+            <property name="eclipselink.target-database" value="MySQL"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
 
         </properties>
     </persistence-unit>

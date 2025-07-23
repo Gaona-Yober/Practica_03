@@ -1,0 +1,16 @@
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="reservaPU" transaction-type="JTA">
+        <jta-data-source>jdbc/reservasDS</jta-data-source>
+        <properties>
+            <property name="javax.persistence.schema-generation.database.action" value="update"/>
+            <property name="eclipselink.target-database" value="MySQL"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:mysql://db:3306/reservas_db?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC"/>
+        </properties>
+    </persistence-unit>
+</persistence>
