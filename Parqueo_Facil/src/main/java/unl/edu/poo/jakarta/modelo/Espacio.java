@@ -6,9 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "espacios")
 public class Espacio {
 
-
-    // Atributos
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,12 +14,10 @@ public class Espacio {
     private String ubicacion;
     private int capacidad;
 
-    // Constructore
     public Espacio() {
-        // Constructor por defecto requerido por JPA
+        // Constructor requerido por JPA
     }
 
-    // Mettodos
     public Long getId() {
         return id;
     }
@@ -60,11 +55,11 @@ public class Espacio {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Espacio other = (Espacio) obj;
-        return id != null && id.equals(other.getId());
+        return id != null && id.equals(other.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return id != null ? id.hashCode() : 0;
     }
 }

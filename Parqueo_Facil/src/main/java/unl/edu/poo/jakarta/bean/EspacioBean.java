@@ -19,7 +19,7 @@ public class EspacioBean implements Serializable {
     private Espacio espacio = new Espacio();
     private Espacio espacioSeleccionado;
 
-    @EJB
+    @Inject
     private EspacioFacade espacioFacade;
 
     public void guardar() {
