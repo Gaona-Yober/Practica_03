@@ -1,0 +1,30 @@
+Manual de Usuario - Sistema Parqueo Fácil
+1. Introducción
+Este manual está diseñado para guiar al usuario en el uso básico del sistema Parqueo Fácil.
+El sistema permite a los usuarios registrarse, iniciar sesión y realizar reservas de espacios de parqueo.
+
+2. Requisitos del sistema
+- Navegador web actualizado (Google Chrome, Firefox, Edge).
+- Conexión a internet.
+- Acceso al sistema a través de:  http://localhost:9080
+
+3. Iniciar sesión
+    1. Acceda al sistema mediante el navegador.
+    2. Ingrese su correo electrónico y contraseña.
+    3. Haga clic en 'Iniciar sesión'.
+    4. Si los datos son correctos, accederá a la plataforma principal.
+
+4. Reservar un espacio
+    1. Ingrese a la sección de reservas.
+    2. Seleccione un espacio disponible.
+    3. Escoja la fecha y hora de reserva.
+    4. Haga clic en 'Confirmar reserva'.
+    5. Verá un mensaje de confirmación si todo fue exitoso.
+
+5. Cerrar sesión
+Para salir del sistema, haga clic en el botón de 'Cerrar sesión' en la parte superior derecha de la pantalla.
+
+6. Mensajes comunes del sistema
+- "Usuario no encontrado": Verifique que su correo esté correctamente escrito.
+- "Contraseña incorrecta": Intente nuevamente o use la opción de recuperar contraseña.
+- "Espacio no disponible": Elija otro espacio o verifique la disponibilidad en otro horario.
